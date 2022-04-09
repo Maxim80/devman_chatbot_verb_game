@@ -1,17 +1,16 @@
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from dialogflow_lib import detect_intent_text
 from dotenv import load_dotenv
 import os
 
 
-def start(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /start is issued."""
-    update.message.reply_markdown_v2(fr'Здравствуйте')
-
-
-def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
+def text_message(update: Update, context: CallbackContext) -> None:
+    """Answer to user text message."""
+    user_message_text = update.message.text
+    chat_id = update.message.chat_id
+    intent_text = detect_intent_text(chat_id, user_message_text)
+    update.message.reply_text(intent_text)
 
 
 def main() -> None:
@@ -22,14 +21,11 @@ def main() -> None:
     # Create the Updater and pass it your bot's token.
     updater = Updater(telegram_token)
 
-    # Get the dispatcher to register handlers
+    # Get the dispatcher to register handlers.
     dispatcher = updater.dispatcher
 
-    # on different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler('start', start))
-
-    # on non command i.e message - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    # In response to the user's text message will return the intent from dialogflow.
+    dispatcher.add_handler(MessageHandler(Filters.text, text_message))
 
     # Start the bot
     updater.start_polling()
