@@ -1,5 +1,5 @@
-from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram import Update
+from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
 from dialogflow_lib import detect_intent_text
 from dotenv import load_dotenv
 import os
@@ -7,9 +7,10 @@ import os
 
 def text_message(update: Update, context: CallbackContext) -> None:
     """Answer to user text message."""
+    project_id = os.environ['DIALOGFLOW_PROJECT_ID'] or os.getenv('DIALOGFLOW_PROJECT_ID')
     user_message_text = update.message.text
-    chat_id = update.message.chat_id
-    intent_text = detect_intent_text(chat_id, user_message_text)
+    session_id = update.message.chat_id
+    intent_text = detect_intent_text(project_id, session_id, user_message_text)
     update.message.reply_text(intent_text)
 
 
