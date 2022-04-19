@@ -7,15 +7,16 @@ import random
 import os
 
 
-def echo(event, vk_api, dataflow_project_id):
+def reply_to_user_message(event, vk_api, dataflow_project_id):
     user_message_text = event.text
     session_id = event.user_id
-    intent_text = detect_intent_text(dataflow_project_id, session_id, user_message_text)
-    vk_api.messages.send(
-        user_id=event.user_id,
-        message=intent_text,
-        random_id=random.randint(1,1000)
-    )
+    intent_text, is_fallback = detect_intent_text(dataflow_project_id, session_id, user_message_text)
+    if not is_fallback:
+        vk_api.messages.send(
+            user_id=event.user_id,
+            message=intent_text,
+            random_id=random.randint(1,1000)
+        )
 
 
 def main():
@@ -27,7 +28,7 @@ def main():
     longpoll = VkLongPoll(vk_session)
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            echo(event, vk_api, dataflow_project_id)
+            reply_to_user_message(event, vk_api, dataflow_project_id)
 
 
 if __name__ == "__main__":

@@ -36,4 +36,5 @@ def detect_intent_text(project_id, session_id, text, language_code='ru'):
         request={"session": session, "query_input": query_input}
     )
     fulfillment = response.query_result.fulfillment_text
-    return fulfillment
+    is_fallback = response.query_result.intent.is_fallback
+    return (fulfillment, is_fallback)
