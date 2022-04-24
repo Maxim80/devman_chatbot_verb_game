@@ -11,7 +11,7 @@ def main() -> None:
 
     with open('questions.json', 'r') as f:
         training_questions = json.load(f)
-    
+
     for intent in intents:
         training_phrases_parts = training_questions[intent]['questions']
         message_text = training_questions[intent]['answer']
