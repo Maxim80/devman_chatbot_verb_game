@@ -26,10 +26,10 @@ def reply_to_user_message(event, vk_api, dataflow_project_id):
 
 def main():
     load_dotenv()
-    vk_token = os.environ['VK_TOKEN'] or os.getenv('VK_TOKEN')
-    telegram_token = os.environ['TELERGAM_TOKEN'] or os.getenv('TELERGAM_TOKEN')
-    admin_chat_token = os.environ['ADMIN_CHAT_ID'] or os.getenv('ADMIN_CHAT_ID')
-    dataflow_project_id = os.environ['DIALOGFLOW_PROJECT_ID'] or os.getenv('DIALOGFLOW_PROJECT_ID')
+    vk_token = os.getenv('VK_TOKEN')
+    telegram_token = os.getenv('TELERGAM_TOKEN')
+    admin_chat_token = os.getenv('ADMIN_CHAT_ID')
+    dataflow_project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
 
     logging.basicConfig(level=logging.DEBUG)
     logger.addHandler(TelegramLogsHandler(telegram_token, admin_chat_token))

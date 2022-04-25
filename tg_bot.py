@@ -13,7 +13,7 @@ logger = logging.getLogger(__file__)
 def reply_to_user_message(update: Update, context: CallbackContext) -> None:
     """Answer to user text message."""
 
-    project_id = os.environ['DIALOGFLOW_PROJECT_ID'] or os.getenv('DIALOGFLOW_PROJECT_ID')
+    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
     user_message_text = update.message.text
     session_id = update.message.chat_id
     intent_text, _ = detect_intent_text(project_id, session_id, user_message_text)
@@ -24,8 +24,8 @@ def main() -> None:
     """Start the bot."""
 
     load_dotenv()
-    telegram_token = os.environ['TELERGAM_TOKEN'] or os.getenv('TELERGAM_TOKEN')
-    admin_chat_token = os.environ['ADMIN_CHAT_ID'] or os.getenv('ADMIN_CHAT_ID')
+    telegram_token = os.getenv('TELERGAM_TOKEN')
+    admin_chat_token = os.getenv('ADMIN_CHAT_ID')
 
     logging.basicConfig(level=logging.DEBUG)
     logger.addHandler(TelegramLogsHandler(telegram_token, admin_chat_token))

@@ -5,16 +5,14 @@ import os
 
 def main() -> None:
     load_dotenv()
-    project_id = os.environ['DIALOGFLOW_PROJECT_ID'] or os.getenv('DIALOGFLOW_PROJECT_ID')
-
-    intents = ['Устройство на работу']
+    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
 
     with open('questions.json', 'r') as f:
         training_questions = json.load(f)
 
-    for intent in intents:
-        training_phrases_parts = training_questions[intent]['questions']
-        message_text = training_questions[intent]['answer']
+    for intent, questions in training_questions.items():
+        training_phrases_parts = questions['questions']
+        message_text = questions['answer']
         create_intent(project_id, intent, training_phrases_parts, [message_text])
 
 
